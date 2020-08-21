@@ -11,23 +11,42 @@ class Comments extends Component
     public $comments;
     public $newComment;
 
-    public function mount(){
-        $initialComment = Comment::all();
+
+    public function mount()
+    {
+        $initialComment = Comment::latest()->get();
         $this->comments = $initialComment;
     }
 
-    public function addComment(){
-        if ($this->newComment == ""){
-            return "";
-        }
-        array_unshift($this->comments, [
-            'body' => $this->newComment,
-            'created_at' => Carbon::now()->diffForHumans(),
-            'creator' => 'Deneme'
+
+    public function addComment()
+    {
+
+        $this->validate([
+            'newComment' => 'required',
         ]);
 
-        $this->newComment ="";
+        $create = Comment::create([
+            'body' => $this->newComment,
+            'user_id' => 1
+        ]);
+
+        $this->comments->prepend($create);
+
+
+        $this->newComment = "";
     }
+
+
+    public function updated($fields)
+    {
+
+        $this->validateOnly($fields, [
+            'newComment' => 'required',
+        ]);
+
+    }
+
 
     public function render()
     {
