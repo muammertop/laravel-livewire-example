@@ -32,9 +32,8 @@ class Comments extends Component
         ]);
 
         $this->comments->prepend($create);
-
-
         $this->newComment = "";
+        session()->flash('message');
     }
 
 
@@ -45,6 +44,13 @@ class Comments extends Component
             'newComment' => 'required',
         ]);
 
+    }
+
+
+    public function remove($commentId)
+    {
+        Comment::destroy($commentId);
+        $this->comments = $this->comments->except($commentId);
     }
 
 
