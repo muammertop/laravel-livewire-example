@@ -13,11 +13,11 @@
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss/dist/tailwind.min.css" rel="stylesheet">
         <livewire:styles />
 
+        <livewire:scripts />
     </head>
     <body>
 
     <livewire:comments />
 
-    <livewire:scripts />
     </body>
 </html>

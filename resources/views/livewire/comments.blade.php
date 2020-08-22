@@ -6,6 +6,13 @@
                 {{ session('message') }}
             </div>
         @endif
+
+
+        <section>
+            <img src="{{ $image }}"  width="100"/>
+            <input type="file" id="image" wire:change="$emit('fileChoosen')">
+        </section>
+
         <form wire:submit.prevent="addComment" class="my-4 flex">
             <input type="text" class="w-full rounded border shadow p-2 mr-2 my-2x" placeholder="What's in your mind." wire:model="newComment">
             <div class="py-0">
@@ -25,8 +32,24 @@
                     <i class="fa fa-times text-red-200 hover:text-red-600 cursor-pointer" wire:click="remove({{ $comment->id }})"></i>
                 </div>
                 <p class="text-gray-800">{{ $comment->body }}</p>
+                @if($comment->image)
+                    <img src="{{ $comment->imagePath }}">
+                @endif
             </div>
         @endforeach
         {{ $comments->links('paginate-links') }}
     </div>
 </div>
+
+<script>
+
+    window.livewire.on('fileChoosen', () => {
+        let inputField = document.getElementById('image');
+        let file = inputField.files[0];
+        let reader = new FileReader();
+        reader.onloadend = () => {
+            window.livewire.emit('fileUpload', reader.result)
+        }
+        reader.readAsDataURL(file)
+})
+</script>
